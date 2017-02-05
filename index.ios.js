@@ -13,8 +13,11 @@ import {
   View,
   ScrollView,
   ListView,
-  Image
+  Image,
+  Navigator
 } from 'react-native';
+
+import MyScene from './MyScene';
 
 export default class AwesomeProject extends Component {
   constructor(props) {
@@ -29,51 +32,51 @@ export default class AwesomeProject extends Component {
 
     return (
       <ScrollView>
-      <View style={styles.container}>
-        <Image source={pic} style={{width: 193, height: 110}}/>
-        <Blink style={styles.red} text='Rexxar' />
-        <Blink style={styles.bigblue}  text='Jaina' />
-        <Blink style={[styles.bigblue, styles.red]} text='Valeera' />
-        <Text style={styles.welcome}>
-          Welcome to React Native App!{'\n'}
-          Thanks
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-        <TextInput
-          style={{
-            height: 40,
-            backgroundColor: '#FFFF00',
-          }}
-          placeholder="Type here to translate!"
-          onChangeText={(text) => this.setState({text})}
-        />
-        <Text style={{
-          padding: 10,
-          fontSize: 42,
-          backgroundColor: '#FF0000',
-        }}>
-          {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
-        </Text>
-      </View>
+        <View style={styles.container}>
+          <Image source={pic} style={{width: 193, height: 110}}/>
+          <Blink style={styles.red} text='Rexxar' />
+          <Blink style={styles.bigblue}  text='Jaina' />
+          <Blink style={[styles.bigblue, styles.red]} text='Valeera' />
+          <Text style={styles.welcome}>
+            Welcome to React Native App!{'\n'}
+            Thanks
+          </Text>
+          <Text style={styles.instructions}>
+            To get started, edit index.ios.js
+          </Text>
+          <Text style={styles.instructions}>
+            Press Cmd+R to reload,{'\n'}
+            Cmd+D or shake for dev menu
+          </Text>
+          <TextInput
+            style={{
+              height: 40,
+              backgroundColor: '#FFFF00',
+            }}
+            placeholder="Type here to translate!"
+            onChangeText={(text) => this.setState({text})}
+          />
+          <Text style={{
+            padding: 10,
+            fontSize: 42,
+            backgroundColor: '#FF0000',
+          }}>
+            {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
+          </Text>
+        </View>
 
-      <Text style={{fontSize:40}}>Scroll me plz</Text>
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Text style={{fontSize:40}}>If you like</Text>
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
-      <Image source={require('./img/favicon.png')} />
+        <Text style={{fontSize:40}}>Scroll me plz</Text>
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Text style={{fontSize:40}}>If you like</Text>
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
+        <Image source={require('./img/favicon.png')} />
 
       </ScrollView>
     );
@@ -295,5 +298,45 @@ async function getMoviesFromApi() {
     console.log(e.code, e.reason);
   };
 }
-AppRegistry.registerComponent('AwesomeProject', () => ListViewBasics);
+
+class SimpleNavigationApp extends Component {
+  render() {
+    return (
+      <Navigator
+        initialRoute={
+          {
+            title: 'My Initial Scene',
+            index: 0
+          }
+        }
+        renderScene={
+          (route, navigator) =>
+          <MyScene
+            title={route.title}
+
+            // Function to call when a new scene should be displayed
+            onForward={() => {
+              const nextIndex = route.index + 1;
+              navigator.push(
+                {
+                  title: 'Scene ' + nextIndex,
+                  index: nextIndex,
+                }
+              );
+            }}
+
+            // Function to call to go back to the previous scene
+            onBack={() => {
+              if (route.index > 0) {
+                navigator.pop();
+              }
+            }}
+          />
+        }
+      />
+    )
+  }
+}
+
+AppRegistry.registerComponent('AwesomeProject', () => SimpleNavigationApp);
 // AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
